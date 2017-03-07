@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
                     mAdapter.notifyItemRemoved(position);
                 }else {
                     List<AppInfo> list = queryFilterAppInfo(FILTER_THIRD_APP);
-                    mData.addAll(position,list);
-                    mAdapter.notifyItemRangeChanged(position,list.size());
+                    mData.add(position,list.get(0));
+                    mAdapter.notifyItemInserted(position);
                 }
             }
         });
