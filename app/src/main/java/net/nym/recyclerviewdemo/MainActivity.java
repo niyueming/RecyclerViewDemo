@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import android.widget.TextView;
 
 import net.nym.recyclerviewlibrary.adapter.BaseRecyclerAdapter;
 import net.nym.recyclerviewlibrary.animator.SimpleAnimator;
+import net.nym.recyclerviewlibrary.callback.ItemTouchHelperListener;
+import net.nym.recyclerviewlibrary.callback.SimpleItemTouchCallback;
 import net.nym.recyclerviewlibrary.divider.RecyclerViewGridDivider;
 import net.nym.recyclerviewlibrary.endless.EndlessRecyclerOnScrollListener;
 
@@ -84,6 +87,25 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("onLoadNextPage");
             }
         });
+
+        /**
+         * 测试上下拖动item，和滑动删除item
+         */
+        SimpleItemTouchCallback callback = new SimpleItemTouchCallback(new ItemTouchHelperListener() {
+            @Override
+            public void onItemMove(int fromPosition, int toPosition) {
+                Collections.swap(mData,fromPosition,toPosition);
+                mAdapter.notifyItemMoved(fromPosition,toPosition);
+            }
+
+            @Override
+            public void onItemSwiped(int position) {
+                mData.remove(position);
+                mAdapter.notifyItemRemoved(position);
+            }
+        });
+        ItemTouchHelper helper = new ItemTouchHelper(callback);
+        helper.attachToRecyclerView(recyclerView);
 
     }
 
